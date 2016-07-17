@@ -1,0 +1,83 @@
+---
+title       : BMI Calculator
+subtitle    : Part of Data Products Course
+author      : Alexandre Gabriel
+job         : BI Specialist
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Slide 2
+
+This is a presentation to show:
+- What the BMI calculator does;
+- ui.R code;
+- server.R code.
+
+I will post the .R codes here given I didn't find out where I could put them when submitting my project.
+
+--- .class #id 
+
+## Slide 3
+
+The BMI calculator takes 2 inputs (height in meters and weight in kilograms) and calculates the BMI (Body Mass Index) given those two values.
+
+The BMI formula is weight/(height*height).
+
+For instance, in my case, I have 1.85m and weight 120kg. So my BMI is
+
+```{r}
+height <- 1.85
+weight <- 120
+bmi <- weight/(height*height)
+bmi
+```
+
+--- .class #id 
+
+## Slide 4
+
+ui.R code:
+
+```{r eval=FALSE}
+library(shiny)
+shinyUI(pageWithSidebar(
+  headerPanel ("BMI Calculator"),
+  sidebarPanel(
+    h3('Instructions'),
+    p('Enter the height (in cm), and weight (in kg).  
+      The calculated BMI will be shown to the right.'),
+    h3('Please enter predictors of BMI below.'),
+    numericInput(inputId = "height", label = 'Height (cm)', value = 170),
+    numericInput(inputId = "weight", label = 'Weight (kg)', value = 80) ),
+  mainPanel(
+    p('Height'), textOutput("height"),
+    p('Weight'), textOutput("weight"),
+    p('BMI'), textOutput("result")
+  )
+))
+```
+
+--- .class #id 
+
+## Slide 5
+
+server.R code:
+
+```{r eval=FALSE}
+library(shiny)
+shinyServer(
+  function(input,output) {
+    output$height <- renderText(input$height) 
+    output$weight <- renderText(input$weight)
+    #10000 below because height was given in centimeters
+    output$result <- reactive({input$weight/(input$height*input$height/10000)})
+  }
+)
+```
+
+
